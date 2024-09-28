@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Recorrido VR en un Mundo Interactivo</title>
+    <!-- Incluir A-Frame -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <!-- Incluir A-Frame Extras para efectos de partículas -->
+    <script src="https://unpkg.com/aframe-extras@6.1.0/dist/aframe-extras.min.js"></script>
+    <!-- Incluir Speech Synthesis API para audio narrativo -->
+    <script>
+      function narrar(texto) {
+        const speech = new SpeechSynthesisUtterance(texto);
+        speech.lang = "es-ES";
+        window.speechSynthesis.speak(speech);
+      }
+    </script>
+    <!-- Música de fondo -->
+    <audio id="background-music" loop>
+      <source src="ruta_de_musica_calma.mp3" type="audio/mp3">
+    </audio>
+  </head>
+
+  <body>
+    <!-- Escena A-Frame -->
+    <a-scene background="color: #000000" vr-mode-ui="enabled: true" shadow="type: pcfsoft">
+      <!-- Fondo dinámico -->
+      <a-sky color="#001" material="shader: flat; side: back"></a-sky>
+
+      <!-- Texto inicial de bienvenida -->
+      <a-text value="Explora el mundo de la fructosa" color="#FFFFFF" position="0 3 -5" align="center" scale="3 3 3" shadow="cast: true"></a-text>
+
+      <!-- Modelo de la molécula de fructosa en el recorrido -->
+      <a-entity id="fructosa" obj-model="obj: #fructosa-obj; mtl: #fructosa-mtl" position="0 1.5 -5" scale="0.2 0.2 0.2" shadow="cast: true; receive: true" rotation="0 45 0"></a-entity>
+
+      <!-- Efectos de partículas simulando átomos -->
+      <a-entity particle-system="preset: dust; color: #ff0000, #00ff00; particleCount: 200" position="0 2 -5"></a-entity>
+
+      <!-- Definir los assets (archivos) -->
+      <a-assets>
+        <a-asset-item id="fructosa-obj" src="fructosa.obj"></a-asset-item>
+        <a-asset-item id="fructosa-mtl" src="fructosa.mtl"></a-asset-item>
+      </a-assets>
+
+      <!-- Crear un suelo para dar la sensación de estar caminando en un mundo -->
+      <a-plane rotation="-90 0 0" width="100" height="100" color="#3a3a3a" shadow="receive: true"></a-plane>
+
+      <!-- Crear algunos objetos alrededor para dar la sensación de un mundo más complejo -->
+      <a-box position="-5 0.5 -10" rotation="0 45 0" width="2" height="2" depth="2" color="#4CC3D9"></a-box>
+      <a-sphere position="5 1.25 -8" radius="1.25" color="#EF2D5E"></a-sphere>
+      <a-cylinder position="-3 0.75 -12" radius="0.75" height="1.5" color="#FFC65D"></a-cylinder>
+      <a-cone position="3 0.5 -15" radius-bottom="2" height="2" color="#7BC8A4"></a-cone>
+
+      <!-- Añadir luces mejoradas para destacar detalles -->
+      <a-light type="ambient" color="#ffffff" intensity="0.3"></a-light>
+      <a-light type="point" intensity="1.5" position="2 4 -3" distance="15"></a-light>
+
+      <!-- Cámara con movimiento automático hacia adelante y controles para rotar con la cabeza -->
+      <a-camera id="camera" position="0 1.6 0" wasd-controls-enabled="false" look-controls="enabled: true" animation__move="property: position; to: 0 1.6 -100; dur: 30000; easing: linear; loop: false">
+        <a-cursor></a-cursor>
+      </a-camera>
+
+      <!-- Narración y música -->
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const music = document.getElementById('background-music');
+          
+          // Narrar la introducción
+          narrar("Bienvenidos a la experiencia 360. Recorre el mundo de la fructosa mientras exploras el entorno.");
+
+          // Reproducir música de fondo
+          music.play();
+        });
+      </script>
+
+    </a-scene>
+  </body>
+</html>
